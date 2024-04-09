@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LiTeboho Solutions</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    .navbar {
+      background-color: blue;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    .navbar a {
+      display: inline-block;
+      color: yellow;
+      padding: 14px 20px;
+      text-decoration: none;
+      transition: background-color 0.3s;
+      position: relative;
+    }
+
+    .navbar a::before {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px; /* Adjust thickness of the line */
+      background-color: white;
+      transition: width 0.3s;
+    }
+
+    .navbar a:hover::before {
+      width: 100%;
+    }
+
+    .left-content {
+      float: left;
+      width: calc(100% - 240px); /* Adjust width to leave space for navbar */
+      padding: 20px;
+      background-color: #f2f2f2; /* Background color for the left content */
+    }
+
+    @media (max-width: 600px) {
+      .navbar a {
+        display: block;
+        padding: 10px;
+      }
+      .left-content {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="navbar">
+    <a href="current">Home</a>
+    <a href="about.html">About</a>
+    <a href="portfolio.html">Portfolio</a>
+    <a href="products_n_services.html">Services</a>
+    <a href="contact.html">Contact</a>
+</div>
+
+<div class="left-content">
+  <h1>LiTeboho Solutions.</h1>
+    <h2>Consistency in Quality.</h2> 
+    <br>LiTeboho Solutions’ vision is to be a leading engineering, project management, infrastructural development, empowerment company committed to the reconstruction and development of the resources of South Africa, Africa and the rest of the world.</br> 
+</div>
+
+</body>
+</html>

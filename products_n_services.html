@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products and Services</title>
+    <style>
+        body {
+          margin: 0;
+          font-family: Arial, sans-serif;
+          background-color: #f2f2f2;
+        }
+    
+        .navbar {
+          background-color: #333;
+          overflow: hidden;
+          text-align: center;
+        }
+    
+        .navbar a {
+          display: inline-block;
+          color: white;
+          padding: 14px 20px;
+          text-decoration: none;
+          transition: background-color 0.3s;
+          position: relative;
+        }
+    
+        .navbar a::before {
+          content: "";
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 0;
+          height: 2px; /* Adjust thickness of the line */
+          background-color: white;
+          transition: width 0.3s;
+        }
+    
+        .navbar a:hover::before {
+          width: 100%;
+        }
+    
+        .left-content {
+          width: calc(100% - 240px); /* Adjust width to leave space for navbar */
+          padding: 20px;
+          background-color: #fff; /* Background color for the left content */
+          box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Add shadow effect */
+          margin: 20px auto; /* Center the content */
+          border-radius: 10px; /* Add rounded corners */
+          display: flex; /* Use flexbox to arrange items */
+          flex-wrap: wrap; /* Allow items to wrap */
+          justify-content: space-between; /* Space items evenly */
+        }
+        
+        /* Style for the image and text layout */
+        .product-container {
+          width: calc(50% - 10px); /* Set width of product container */
+          margin-bottom: 20px; /* Add space between product containers */
+          border: 1px solid #ddd; /* Add border */
+          border-radius: 5px; /* Add rounded corners */
+          overflow: hidden; /* Prevent content from overflowing */
+        }
+        
+        .product-image img {
+          width: 100%; /* Ensure image fills its container */
+          height: auto; /* Maintain aspect ratio */
+          border-bottom: 1px solid #ddd; /* Add border at the bottom */
+        }
+        
+        .product-description {
+          padding: 20px; /* Add padding */
+        }
+        
+        .product-description h3 {
+          margin-top: 0; /* Remove default margin */
+          color: #333; /* Change heading color */
+        }
+    
+        @media (max-width: 600px) {
+          .left-content {
+            width: 90%; /* Adjust width for smaller screens */
+            flex-direction: column; /* Stack items vertically on smaller screens */
+          }
+          
+          .product-container {
+            width: 100%; /* Set full width for smaller screens */
+          }
+        }
+      </style>
+    </head>
+    <body>
+    
+    <div class="navbar">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="current">Product and Services</a>
+        <a href="contact.html">Contact</a>
+    </div>
+
+    <div class="left-content">
+        <h2 style="text-align: center;">Products and Services</h2>
+        <div class="product-container">
+            <div class="product-image">
+                <img src="_images/Repair and Maintenance.jpeg" alt="Repairs and Maintenance Logo Image">
+            </div>
+            <div class="product-description">
+                <h3>REPAIRS AND MAINTENANCE TO INFRASTRUCTURE</h3>
+                <p>Electrical Work <br> Plumbing <br> Painting <br> Waterproofing <br> Garden Services <br> Building </p>
+            </div>
+        </div>
+        <div class="product-container">
+            <div class="product-image">
+                <img src="_images/Construction.jpeg" alt="Construction Logo Image">
+            </div>
+            <div class="product-description">
+                <h3>CONSTRUCTION</h3>
+                <p> Low cost housing <br> Station signage <br> New Parking Control <br> Refurbishment of new and old buildings </p>
+            </div>
+        </div>
+        <div class="product-container">
+            <div class="product-image">
+                <img src="_images/Engineering.jpeg" alt="Engineering Logo Image" height="50">
+            </div>
+            <div class="product-description">
+                <h3>ENGINEERING</h3>
+                <p>Project Engineering <br> Product Management <br> Electrical Engineering <br> Conducting overalls <br>Technical System Audits </p>
+            </div>
+        </div>
+        <div class="product-container">
+            <div class="product-image">
+                <img src="_images/Earthworks.webp" alt="Road and Earthworks Logo Image">
+            </div>
+            <div class="product-description">
+                <h3>ROAD AND EARTHWORKS</h3>
+                <p>Road Construction <br> Road Markings <br> Stormwater and Sewage <br> Conducting overalls <br>Technical System Audits </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
