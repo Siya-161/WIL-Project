@@ -1,0 +1,24 @@
+﻿<Window x:Class="Inventory_System_WPF.Login"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Inventory_System_WPF"
+        mc:Ignorable="d"
+        Title="Login" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Username:" Margin="20,50,0,0"/>
+        <TextBox Grid.Row="0" Margin="80,50,5,5"/>
+
+        <TextBlock Grid.Row="1" Text="Password:" Margin="20,50,0,0"/>
+        <PasswordBox Grid.Row="1" Margin="80,50,5,5"/>
+
+        <Button Grid.Row="2" Content="Login" HorizontalAlignment="Center" Margin="50"/>
+    </Grid>
+</Window>
