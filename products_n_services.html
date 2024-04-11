@@ -1,181 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"> 
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Products and Services</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="style.css">
-    <style>
-        body {
-          margin: 0;
-          font-family: Arial, sans-serif;
-          background-color: white; /* Set the background color to white */
-        }
-        
+    <link rel="stylesheet" href="CSS/style.css">
 
-        .social-media-links {
-          background-color: black; /* Set the background color of the social media links to black */
-          text-align: center;
-          padding: 10px 0; /* Add padding to the social media links */
-          display: flex;
-          justify-content: space-between; /* Arrange links on both sides */
-        }
+   
 
-        .social-media-links a {
-          color: orange; /* Set the text color of the social media icons to orange */
-          padding: 0 10px; /* Add padding to the social media icons */
-          font-size: 20px; /* Adjust the font size of the social media icons */
-          text-decoration: none;
-        }
-
-        .navbar {
-          background-color: black; /* Set the background color of the navbar to black */
-          overflow: hidden;
-          text-align: center;
-          position: relative; /* Add position relative for the pseudo-element */
-        }
-
-        .navbar a {
-          display: inline-block;
-          color: white; /* Set the text color of the navbar links to white */
-          padding: 14px 20px;
-          text-decoration: none;
-          position: relative; /* Add position relative for the pseudo-element */
-        }
-
-        .navbar a::before {
-          content: "";
-          position: absolute;
-          bottom: 2px; /* Position the line below the text */
-          left: 50%;
-          transform: translateX(-50%);
-          width: 0;
-          height: 2px;
-          background-color: orange; /* Set line color to orange */
-          transition: width 0.3s; /* Add transition effect to width */
-        }
-
-        .navbar a:hover::before {
-          width: 100%; /* Expand width to 100% on hover */
-        }
-
-        .left-content {
-          width: 100%;
-          padding: 20px;
-          background-color: white;
-          margin: 20px auto;
-          text-align: center;
-          
-        }
-
-        .row {
-          display: flex;
-          flex-wrap: wrap;
-          justify-content: space-around;
-        }
-
-        .column {
-          flex: 0 0 45%;
-          margin-bottom: 20px;
-          text-align: left;
-        }
-
-        .column img {
-          width: 100px;
-          height: 100px;
-        }
-
-        .column ul {
-          margin-top: 10px;
-          padding-left: 20px;
-        }
-
-        .column ul li {
-          margin-bottom: 5px;
-        }
-
-        .column ul li:last-child {
-          margin-bottom: 0;
-        }
-
-        .column h3 {
-          margin-top: 0;
-          color: black;
-        }
-
-        .center-text {
-          text-align: center;
-        }
-
-        @media (max-width: 600px) {
-          .navbar a {
-            display: block;
-            padding: 10px;
-          }
-
-          .column {
-            flex: none;
-            width: 90%;
-          }
-
-          .fa {
-            padding: 20px;
-            font-size: 30px;
-            width: 50px;
-            text-align: center;
-            text-decoration: none;
-          }
-
-          .fa:hover {
-            opacity: 0.7;
-          }
-
-          .fa-facebook {
-            background: black;
-            color: orange;
-          }
-
-          .fa-instagram {
-            background: black;
-            color: orange;
-          }
-          .fa-linkedin {
-            background: black;
-            color: orange;
-          }
-          .fa-phone {
-            background: black;
-            color: orange;
-          }
-          p {text-align: center;}
-          .footer {
-            margin-left: 50px;
-          }
-        }
-    </style>
 </head>
 <body>
 <header>
   <div class="social-media-links">
     <div>
-      <a href="#" class="fa fa-facebook"></a>
-      <a href="#" class="fa fa-instagram"></a>
+      <a href="https://www.facebook.com/" target="_blank" class="fa fa-facebook"></a>
+      <a href="https://www.instagram.com/" target="_blank" class="fa fa-instagram"></a>
     </div>
     <div>
-      <a href="#" class="fa fa-linkedin"></a>
-      <a href="(011) 948 - 6134/ 082 324 6912" class="fa fa-phone"></a>
+      <a href="https://za.linkedin.com/" target="_blank"   class="fa fa-linkedin"></a>
+      <a href="https://web.whatsapp.com/" target="_blank" class="fa fa-phone"></a>
     </div>
   </div>
   <div class="navbar">
     <div class="logo-container">
-      <img src="_images/Liteboho Logo.png" width="150" height="70" class="logo">
+      <img src="_image/Liteboho Logo.png" width="150" height="70" class="logo">
     </div>
     <a href="index.html">Home</a>
-    <a href="about.html">About</a>
+    <a href="about.html">About Us</a>
     <a href="portfolio.html">Portfolio</a>
-    <a href="current">Product and Services</a>
-    <a href="contact.html">Contact</a>
+    <a href="current">Product & Services</a>
+    <a href="contact.html">Contact Us</a>
   </div>
 </header>
 
@@ -184,7 +40,7 @@
     <h2>Products and Services</h2>
     <div class="row">
         <div class="column">
-            <img src="_images/Repair and Maintenance.jpeg" alt="Repairs and Maintenance Logo Image">
+            <img src="_image/Repair and Maintenance.jpeg" alt="Repairs and Maintenance Logo Image">
             <div class="product-description">
                 <h3>REPAIRS AND MAINTENANCE TO INFRASTRUCTURE</h3>
                 <ul>
@@ -198,7 +54,7 @@
             </div>
         </div>
         <div class="column">
-            <img src="_images/Construction.jpeg" alt="Construction Logo Image">
+            <img src="_image/Construction.jpeg" alt="Construction Logo Image">
             <div class="product-description">
                 <h3>CONSTRUCTION</h3>
                 <ul>
@@ -210,7 +66,7 @@
             </div>
         </div>
         <div class="column">
-            <img src="_images/Engineering.jpeg" alt="Engineering Logo Image">
+            <img src="_image/Engineering.jpeg" alt="Engineering Logo Image">
             <div class="product-description">
                 <h3>ENGINEERING</h3>
                 <ul>
@@ -223,7 +79,7 @@
             </div>
         </div>
         <div class="column">
-            <img src="_images/Earthworks.webp" alt="Road and Earthworks Logo Image">
+            <img src="_image/Earthworks.webp" alt="Road and Earthworks Logo Image">
             <div class="product-description">
                 <h3>ROAD AND EARTHWORKS</h3>
                 <ul>
@@ -242,6 +98,8 @@
     Plaster Sand, Building sand {Yellow, Black, Red and Local} Crushed sand, River sand and Bulk 
     filling {G1,G5,G6 and G7} Dump Rock, Stones {13mm-19mm} amongst others</p>
 </div>
-
+<footer>
+  <p>&copy; 2024 Liteboho Solutions. All rights reserved.</p>
+</footer>
 </body>
 </html>
