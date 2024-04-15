@@ -1,0 +1,21 @@
+﻿<Window x:Class="InventoryManagement.DisplayItemsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Display Items" Height="500" Width="800">
+    <Grid>
+        <!-- Item Table -->
+        <DataGrid x:Name="dgItems" AutoGenerateColumns="False" Margin="10" CanUserAddRows="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Item ID" Binding="{Binding ItemID}"/>
+                <DataGridTextColumn Header="Item Name" Binding="{Binding ItemName}"/>
+                <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}"/>
+                <DataGridTextColumn Header="Price" Binding="{Binding Price}"/>
+                <DataGridTextColumn Header="Description" Binding="{Binding Description}"/>
+                <DataGridTextColumn Header="Category" Binding="{Binding Category}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Return to Menu Button -->
+        <Button Content="Return to Menu" Width="120" Height="30" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10" Click="ReturnToMenuButton_Click"/>
+    </Grid>
+</Window>
