@@ -7,7 +7,35 @@
     <title>Welcome to Lietboho Solutions</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="CSS/style.css">
-    
+    <style>
+        .image-with-text-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 50px;
+        }
+
+        .image-with-text-container img {
+            max-width: 50%;
+            height: auto;
+        }
+
+        .image-with-text-container .text {
+            max-width: 45%;
+            padding: 0 20px;
+        }
+
+        @media (max-width: 768px) {
+            .image-with-text-container {
+                flex-direction: column;
+            }
+
+            .image-with-text-container img,
+            .image-with-text-container .text {
+                max-width: 100%;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -37,15 +65,18 @@
 
       </header>
 
-<div class="left-content">
-  <h1>LiTeboho Solutions.</h1>
-    <h2>Consistency in Quality.</h2> 
-    <br>LiTeboho Solutions’ vision is to be a leading engineering, project management, 
-    infrastructural development, empowerment company committed to the reconstruction and development of the resources of South Africa, Africa and the rest of the world.</br> 
-</div>
+    <div class="image-with-text-container">
+        <img src="_image/index hp.jpeg"Image Description">
+        <div class="text">
+            <h1>LiTeboho Solutions.</h1>
+            <h2>Consistency in Quality.</h2>
+            <p>LiTeboho Solutions’ vision is to be a leading engineering, project management, infrastructural development, empowerment company committed to the reconstruction and development of the resources of South Africa, Africa and the rest of the world.</p>
+        </div>
+    </div>
 
-<footer>
-    <p>&copy; 2024 Liteboho Solutions. All rights reserved.</p>
-</footer>
+    <footer>
+        <p>&copy; 2024 Liteboho Solutions. All rights reserved.</p>
+    </footer>
 </body>
+
 </html>
