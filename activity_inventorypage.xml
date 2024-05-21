@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".InventoryPage">
+
+    <!-- Logo ImageView -->
+    <ImageView
+        android:id="@+id/imageViewLogo"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:src="@drawable/liteboho_logo"
+        android:scaleType="fitCenter"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp"/>
+
+    <!-- Welcome Heading TextView -->
+    <TextView
+        android:id="@+id/textViewWelcomeHeading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Inventory Management System"
+        android:textSize="20sp"
+        android:layout_below="@id/imageViewLogo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp" />
+
+    <!-- Add Item Button -->
+    <Button
+        android:id="@+id/buttonAddItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewWelcomeHeading"
+        android:layout_marginTop="32dp"
+        android:text="Add Item"
+        android:layout_centerHorizontal="true" />
+
+    <!-- Edit Item Button -->
+    <Button
+        android:id="@+id/buttonEditItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/buttonAddItem"
+        android:layout_marginTop="16dp"
+        android:text="Edit Item"
+        android:layout_centerHorizontal="true" />
+
+    <!-- Delete Item Button -->
+    <Button
+        android:id="@+id/buttonDeleteItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/buttonEditItem"
+        android:layout_marginTop="16dp"
+        android:text="Delete Item"
+        android:layout_centerHorizontal="true" />
+
+    <!-- Display Item Button -->
+    <Button
+        android:id="@+id/buttonDisplayItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/buttonDeleteItem"
+        android:layout_marginTop="16dp"
+        android:text="Display Item"
+        android:layout_centerHorizontal="true" />
+
+    <!-- Add Item Form Layout -->
+    <LinearLayout
+        android:id="@+id/layoutAddItem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/buttonDisplayItem"
+        android:layout_marginTop="16dp"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <!-- ItemID EditText -->
+        <EditText
+            android:id="@+id/editTextItemID"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Item ID" />
+
+        <!-- ItemName EditText -->
+        <EditText
+            android:id="@+id/editTextItemName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Item Name" />
+
+        <!-- Price EditText -->
+        <EditText
+            android:id="@+id/editTextPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Price" />
+
+        <!-- Quantity EditText -->
+        <EditText
+            android:id="@+id/editTextQuantity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Quantity" />
+
+        <!-- Description EditText -->
+        <EditText
+            android:id="@+id/editTextDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Description" />
+
+        <!-- Category EditText -->
+        <EditText
+            android:id="@+id/editTextCategory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Category" />
+
+        <!-- Save Button -->
+        <Button
+            android:id="@+id/buttonSaveItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:text="Save" />
+    </LinearLayout>
+
+    <!-- Logout Button -->
+    <Button
+        android:id="@+id/buttonLogout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/layoutAddItem"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp"
+        android:text="Logout" />
+
+</RelativeLayout>
