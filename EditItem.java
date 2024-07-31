@@ -5,10 +5,12 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -21,7 +23,7 @@ public class EditItem extends AppCompatActivity {
     private EditText editTextPrice;
     private EditText editTextQuantity;
     private EditText editTextDescription;
-    private Button buttonSearchItem;
+    private Button buttonSearch;
     private Button buttonSaveChanges;
     private Button buttonReturnToMenu;
     private ItemDataSource dataSource;
@@ -39,14 +41,24 @@ public class EditItem extends AppCompatActivity {
         editTextQuantity = findViewById(R.id.editTextQuantity);
         editTextDescription = findViewById(R.id.editTextDescription);
         spinnerCategory = findViewById(R.id.spinnerCategory);
-        buttonSearchItem = findViewById(R.id.buttonSearch);
+        buttonSearch = findViewById(R.id.buttonSearch);
         buttonSaveChanges = findViewById(R.id.buttonSaveChanges);
         buttonReturnToMenu = findViewById(R.id.buttonReturnToMenu);
         dataSource = new ItemDataSource(this);
         dataSource.open();
 
+        // Define categories array
+        final String[] categories = {"Engineering", "Road and Earthworks", "Repairs and Maintenance", "Construction", "Category 5"};
+
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinnerCategory.setAdapter(adapter);
+
         // Set click listener for "Search Item" button
-        buttonSearchItem.setOnClickListener(new View.OnClickListener() {
+        buttonSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 searchItem();
@@ -114,8 +126,17 @@ public class EditItem extends AppCompatActivity {
     private void saveChanges() {
         String itemID = editTextItemID.getText().toString().trim();
         String itemName = editTextItemName.getText().toString().trim();
-        double price = Double.parseDouble(editTextPrice.getText().toString().trim());
-        int quantity = Integer.parseInt(editTextQuantity.getText().toString().trim());
+        double price;
+        int quantity;
+
+        try {
+            price = Double.parseDouble(editTextPrice.getText().toString().trim());
+            quantity = Integer.parseInt(editTextQuantity.getText().toString().trim());
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "Invalid price or quantity", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         String description = editTextDescription.getText().toString().trim();
         String category = spinnerCategory.getSelectedItem().toString();
 

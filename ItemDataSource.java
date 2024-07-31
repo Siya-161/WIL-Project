@@ -30,7 +30,7 @@ public class ItemDataSource {
     // Insert a new item into the database
     public long insertItem(String itemID, String itemName, double price, int quantity, String description, String category) {
         ContentValues values = new ContentValues();
-        values.put(DatabaseHelper.COLUMN_ITEM_ID, itemID); // Include itemID
+        values.put(DatabaseHelper.COLUMN_ITEM_ID, itemID);
         values.put(DatabaseHelper.COLUMN_ITEM_NAME, itemName);
         values.put(DatabaseHelper.COLUMN_PRICE, price);
         values.put(DatabaseHelper.COLUMN_QUANTITY, quantity);
@@ -58,8 +58,13 @@ public class ItemDataSource {
         values.put(DatabaseHelper.COLUMN_DESCRIPTION, description);
         values.put(DatabaseHelper.COLUMN_CATEGORY, category);
 
-        return database.update(DatabaseHelper.TABLE_ITEMS, values, DatabaseHelper.COLUMN_ITEM_ID + " = ?",
+        Log.d(TAG, "Updating item: ID=" + itemID + ", Name=" + itemName + ", Price=" + price + ", Quantity=" + quantity + ", Description=" + description + ", Category=" + category);
+
+        int rowsAffected = database.update(DatabaseHelper.TABLE_ITEMS, values, DatabaseHelper.COLUMN_ITEM_ID + " = ?",
                 new String[]{itemID});
+
+        Log.d(TAG, "Rows affected: " + rowsAffected);
+        return rowsAffected;
     }
 
     // Delete an item from the database
@@ -116,7 +121,6 @@ public class ItemDataSource {
 
         return cursor;
     }
-
 
     // Helper method to convert cursor to string for logging
     private String cursorToString(Cursor cursor) {

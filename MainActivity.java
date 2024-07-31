@@ -7,8 +7,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import org.json.JSONException;
+import org.json.JSONObject;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -16,23 +25,18 @@ public class MainActivity extends AppCompatActivity {
     private EditText editTextPassword;
     private Button buttonRegister;
     private Button buttonLogin;
+    private String baseURL = "http://192.168.0.108/InventoryApp/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Initialize UI components
         editTextUsername = findViewById(R.id.editTextUsername);
         editTextPassword = findViewById(R.id.editTextPassword);
         buttonRegister = findViewById(R.id.buttonRegister);
         buttonLogin = findViewById(R.id.buttonLogin);
 
-        // Set button backgrounds using selector drawable
-        buttonRegister.setBackgroundResource(R.drawable.button_selector);
-        buttonLogin.setBackgroundResource(R.drawable.button_selector);
-
-        // Set click listener for Register button
         buttonRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -40,44 +44,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Set click listener for Login button
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 navigateToLoginPage();
             }
         });
-
-        // Set focus change listener for buttons
-        buttonRegister.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                buttonRegister.setTextColor(hasFocus ? getResources().getColor(R.color.button_focused_colour) :
-                        getResources().getColor(R.color.button_color));
-            }
-        });
-
-        buttonLogin.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                buttonLogin.setTextColor(hasFocus ? getResources().getColor(R.color.button_focused_text_color) :
-                        getResources().getColor(R.color.button_text_color));
-            }
-        });
     }
 
-    // Method to handle registration of a new account
     private void registerNewAccount() {
-        String username = editTextUsername.getText().toString().trim();
-        String password = editTextPassword.getText().toString().trim();
+        final String username = editTextUsername.getText().toString().trim();
+        final String password = editTextPassword.getText().toString().trim();
 
-        // Check if username or password is empty
         if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password)) {
             Toast.makeText(this, "Please enter both username and password", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Perform additional validation checks
         if (!username.contains("@gmail.com")) {
             Toast.makeText(this, "Username must contain @gmail.com", Toast.LENGTH_SHORT).show();
             return;
@@ -88,17 +71,41 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        // Show registration successful message
-        Toast.makeText(this, "Registration successful", Toast.LENGTH_SHORT).show();
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        String url = baseURL + "register.php";
 
-        // Clear the text fields after registration
-        editTextUsername.setText("");
-        editTextPassword.setText("");
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            String message = jsonObject.getString("message");
+                            Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(MainActivity.this, "Registration failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(MainActivity.this, "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("username", username);
+                params.put("password", password);
+                return params;
+            }
+        };
+
+        requestQueue.add(stringRequest);
     }
 
-    // Method to navigate to the login page
     private void navigateToLoginPage() {
-        // Perform action to navigate to the login page
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(intent);
     }
