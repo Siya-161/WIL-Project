@@ -44,6 +44,8 @@
         <!-- DisplayItem Activity -->
         <activity android:name=".DisplayItem" />
 
+        <activity android:name=".PasswordResetActivity"></activity>
+
 
 
         <!-- Add other activities here if needed -->
