@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.android.volley.Request;
@@ -25,18 +26,22 @@ public class LoginActivity extends AppCompatActivity {
     private EditText editTextPassword;
     private Button buttonLogin;
     private Button buttonRegister;
-    private String baseURL = "http://192.168.0.108/InventoryApp/";
+    private TextView forgotPassword;
+    private String baseURL = "http://172.26.32.1/InventoryApp/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        // Initialize UI components
         editTextUsername = findViewById(R.id.editTextUsername);
         editTextPassword = findViewById(R.id.editTextPassword);
         buttonLogin = findViewById(R.id.buttonLogin);
         buttonRegister = findViewById(R.id.buttonRegister);
+        forgotPassword = findViewById(R.id.forgotPassword);
 
+        // Set click listener for the Login button
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -44,10 +49,19 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        // Set click listener for the Register button
         buttonRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 navigateToRegisterPage();
+            }
+        });
+
+        // Set click listener for "I forgot my password" text
+        forgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigateToPasswordResetPage();
             }
         });
     }
@@ -103,6 +117,11 @@ public class LoginActivity extends AppCompatActivity {
 
     private void navigateToRegisterPage() {
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(intent);
+    }
+
+    private void navigateToPasswordResetPage() {
+        Intent intent = new Intent(LoginActivity.this, PasswordResetActivity.class);
         startActivity(intent);
     }
 }

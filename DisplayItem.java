@@ -70,7 +70,7 @@ public class DisplayItem extends AppCompatActivity {
                 TextView textViewItemID = createTextView("ID: " + itemID);
                 TextView textViewItemName = createTextView("Name: " + itemName);
                 TextView textViewQuantity = createTextView("Quantity: " + quantity);
-                TextView textViewPrice = createTextView("Price: $" + price);
+                TextView textViewPrice = createTextView("Price: R" + price);
                 TextView textViewDescription = createTextView("Description: " + description);
                 TextView textViewCategory = createTextView("Category: " + category);
 

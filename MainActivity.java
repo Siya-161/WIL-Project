@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText editTextPassword;
     private Button buttonRegister;
     private Button buttonLogin;
-    private String baseURL = "http://192.168.0.108/InventoryApp/";
+    private String baseURL = "http://172.26.32.1/InventoryApp/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
