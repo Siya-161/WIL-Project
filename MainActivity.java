@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText editTextPassword;
     private Button buttonRegister;
     private Button buttonLogin;
-    private String baseURL = "http://172.26.32.1/InventoryApp/";
+    private String baseURL = "http://172.23.128.1/InventoryApp/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void registerNewAccount() {
-        final String username = editTextUsername.getText().toString().trim();
+        final String username = editTextUsername.getText().toString().trim().toLowerCase(); // Normalize username
         final String password = editTextPassword.getText().toString().trim();
 
         if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password)) {
@@ -82,6 +82,11 @@ public class MainActivity extends AppCompatActivity {
                             JSONObject jsonObject = new JSONObject(response);
                             String message = jsonObject.getString("message");
                             Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
+
+                            if ("Registration successful".equalsIgnoreCase(message)) {
+                                editTextUsername.setText("");
+                                editTextPassword.setText("");
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Toast.makeText(MainActivity.this, "Registration failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -90,7 +95,11 @@ public class MainActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(MainActivity.this, "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                String errorMessage = error.networkResponse != null ?
+                        "Network error: " + new String(error.networkResponse.data) :
+                        "Network error: " + error.getMessage();
+                Toast.makeText(MainActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+                error.printStackTrace();
             }
         }) {
             @Override

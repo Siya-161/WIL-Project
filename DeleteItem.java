@@ -1,30 +1,38 @@
 package com.example.inventorymanagementapp;
 
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONObject;
 
 public class DeleteItem extends AppCompatActivity {
 
-    private Spinner spinnerCategory;
+    private EditText editTextSearch;
     private EditText editTextItemID;
     private EditText editTextItemName;
-    private EditText editTextQuantity;
     private EditText editTextPrice;
+    private EditText editTextQuantity;
     private EditText editTextDescription;
-    private EditText editTextSearch; // Added editTextSearch
-    private ItemDataSource dataSource;
+    private Button buttonSearch;
+    private Button buttonDelete;
+    private Button buttonReturnToMenu;
+
+    private RequestQueue requestQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,162 +40,154 @@ public class DeleteItem extends AppCompatActivity {
         setContentView(R.layout.activity_deleteitem);
 
         // Initialize UI components
-        Button buttonSearch = findViewById(R.id.buttonSearch);
-        Button buttonDelete = findViewById(R.id.buttonDelete);
-        Button buttonReturn = findViewById(R.id.buttonReturnToMenu);
+        editTextSearch = findViewById(R.id.editTextSearch);
         editTextItemID = findViewById(R.id.editTextItemID);
         editTextItemName = findViewById(R.id.editTextItemName);
-        editTextQuantity = findViewById(R.id.editTextQuantity);
         editTextPrice = findViewById(R.id.editTextPrice);
+        editTextQuantity = findViewById(R.id.editTextQuantity);
         editTextDescription = findViewById(R.id.editTextDescription);
-        spinnerCategory = findViewById(R.id.spinnerCategory);
-        editTextSearch = findViewById(R.id.editTextSearch); // Initialize editTextSearch
-        dataSource = new ItemDataSource(this);
-        dataSource.open();
+        buttonSearch = findViewById(R.id.buttonSearch);
+        buttonDelete = findViewById(R.id.buttonDelete);
+        buttonReturnToMenu = findViewById(R.id.buttonReturnToMenu);
 
-        // Set up categories array
-        final String[] categories = {"Engineering", "Road and Earthworks", "Repairs and Maintenance", "Construction", "Category 5"};
+        // Initialize Volley RequestQueue
+        requestQueue = Volley.newRequestQueue(this);
 
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
-        // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
-        spinnerCategory.setAdapter(adapter);
-
-        // Set listener for item selection
-        spinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedCategory = parent.getItemAtPosition(position).toString();
-                Toast.makeText(DeleteItem.this, "Selected category: " + selectedCategory, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // Do nothing
-            }
-        });
-
-        // Set click listener for Search button
+        // Set click listener for "Search Item" button
         buttonSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Implement search functionality
                 searchItem();
             }
         });
 
-        // Set click listener for Delete button
+        // Set click listener for "Delete" button
         buttonDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Show a confirmation dialog before deleting
-                showDeleteConfirmationDialog();
+                confirmDelete();
             }
         });
 
-        // Set click listener for Return button
-        buttonReturn.setOnClickListener(new View.OnClickListener() {
+        // Set click listener for "Return to Menu" button
+        buttonReturnToMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                returnToInventoryPage();
+                returnToMenu();
             }
         });
     }
 
-    // Method to search for an item by its ID or name
     private void searchItem() {
         String searchQuery = editTextSearch.getText().toString().trim();
 
-        Cursor cursor = dataSource.getItemById(searchQuery);
-        if (cursor == null || !cursor.moveToFirst()) {
-            cursor = dataSource.getItemByName(searchQuery);
-        }
+        String url = "http://172.23.128.1/InventoryApp/delete_items.php?query=" + searchQuery;
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            if (response.has("error")) {
+                                Toast.makeText(DeleteItem.this, response.getString("error"), Toast.LENGTH_SHORT).show();
+                                clearFields();
+                            } else {
+                                editTextItemID.setText(response.getString("itemID"));
+                                editTextItemName.setText(response.getString("itemName"));
+                                editTextPrice.setText(response.getString("price"));
+                                editTextQuantity.setText(response.getString("quantity"));
+                                editTextDescription.setText(response.getString("description"));
 
-        if (cursor != null && cursor.moveToFirst()) {
-            editTextItemID.setText(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_ITEM_ID)));
-            editTextItemName.setText(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_ITEM_NAME)));
-            editTextPrice.setText(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_PRICE)));
-            editTextQuantity.setText(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_QUANTITY)));
-            editTextDescription.setText(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_DESCRIPTION)));
-            setSpinnerSelection(spinnerCategory, cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_CATEGORY)));
-            cursor.close();
-        } else {
-            clearFields();
-            Toast.makeText(this, "Item not found", Toast.LENGTH_SHORT).show();
-        }
+                                // Disable ItemID field to make it read-only
+                                editTextItemID.setEnabled(false);
+                                buttonDelete.setEnabled(true); // Enable the delete button
+                            }
+                        } catch (Exception e) {
+                            Toast.makeText(DeleteItem.this, "Error parsing response", Toast.LENGTH_SHORT).show();
+                            clearFields();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(DeleteItem.this, "Failed to retrieve item", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        requestQueue.add(jsonObjectRequest);
     }
 
-
-    // Method to show a confirmation dialog before deleting
-    private void showDeleteConfirmationDialog() {
+    private void confirmDelete() {
         new AlertDialog.Builder(this)
                 .setTitle("Delete Item")
                 .setMessage("Are you sure you want to delete this item?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        // Perform delete operation
                         deleteItem();
                     }
                 })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // User clicked No, do nothing
-                    }
-                })
+                .setNegativeButton(android.R.string.no, null)
                 .show();
     }
 
-    // Method to delete the item
     private void deleteItem() {
         String itemID = editTextItemID.getText().toString().trim();
-        int rowsAffected = dataSource.deleteItem(itemID);
 
-        if (rowsAffected > 0) {
-            // Item deleted successfully
-            Toast.makeText(this, "Item deleted", Toast.LENGTH_SHORT).show();
-            // Clear text fields after deletion
-            clearFields();
-        } else {
-            // Failed to delete item
-            Toast.makeText(this, "Failed to delete item", Toast.LENGTH_SHORT).show();
+        // Create JSON object for request
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("itemID", itemID);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
+        // Send the request
+        String url = "http://172.23.128.1/InventoryApp/delete_items.php"; // Ensure this is the correct URL
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, jsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            if (response.has("success")) {
+                                Toast.makeText(DeleteItem.this, response.getString("success"), Toast.LENGTH_SHORT).show();
+                                clearFields();
+                            } else {
+                                Toast.makeText(DeleteItem.this, response.getString("error"), Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (Exception e) {
+                            Toast.makeText(DeleteItem.this, "Error parsing response", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(DeleteItem.this, "Failed to delete item", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        requestQueue.add(jsonObjectRequest);
     }
 
-    // Method to clear the input fields
     private void clearFields() {
         editTextItemID.setText("");
         editTextItemName.setText("");
         editTextPrice.setText("");
         editTextQuantity.setText("");
         editTextDescription.setText("");
-        spinnerCategory.setSelection(0);
+        // Re-enable ItemID field if clearing fields
+        editTextItemID.setEnabled(true);
+        buttonDelete.setEnabled(false); // Disable the delete button until an item is found
     }
 
-    // Method to return to the Inventory Page
-    private void returnToInventoryPage() {
-        // Return to the Inventory Page activity
-        Intent intent = new Intent(DeleteItem.this, InventoryPage.class);
+    private void returnToMenu() {
+        Intent intent = new Intent(this, InventoryPage.class);
         startActivity(intent);
-        finish(); // Finish this activity
-    }
-
-    // Method to set the spinner selection based on the category
-    private void setSpinnerSelection(Spinner spinner, String category) {
-        for (int i = 0; i < spinner.getCount(); i++) {
-            if (spinner.getItemAtPosition(i).toString().equals(category)) {
-                spinner.setSelection(i);
-                break;
-            }
-        }
     }
 
     @Override
     protected void onDestroy() {
-        dataSource.close();
         super.onDestroy();
+        requestQueue.cancelAll(this);
     }
 }

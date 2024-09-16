@@ -2,7 +2,6 @@ package com.example.inventorymanagementapp;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -13,6 +12,15 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONObject;
 
 public class EditItem extends AppCompatActivity {
 
@@ -26,7 +34,8 @@ public class EditItem extends AppCompatActivity {
     private Button buttonSearch;
     private Button buttonSaveChanges;
     private Button buttonReturnToMenu;
-    private ItemDataSource dataSource;
+
+    private RequestQueue requestQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,17 +53,16 @@ public class EditItem extends AppCompatActivity {
         buttonSearch = findViewById(R.id.buttonSearch);
         buttonSaveChanges = findViewById(R.id.buttonSaveChanges);
         buttonReturnToMenu = findViewById(R.id.buttonReturnToMenu);
-        dataSource = new ItemDataSource(this);
-        dataSource.open();
+
+        // Initialize Volley RequestQueue
+        requestQueue = Volley.newRequestQueue(this);
 
         // Define categories array
         final String[] categories = {"Engineering", "Road and Earthworks", "Repairs and Maintenance", "Construction", "Category 5"};
 
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
-        // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
         spinnerCategory.setAdapter(adapter);
 
         // Set click listener for "Search Item" button
@@ -82,104 +90,144 @@ public class EditItem extends AppCompatActivity {
         });
     }
 
-    // Method to search for an item by its ID or name
     private void searchItem() {
         String searchQuery = editTextSearch.getText().toString().trim();
 
-        Cursor cursor = dataSource.getItemById(searchQuery);
-        if (cursor == null || !cursor.moveToFirst()) {
-            cursor = dataSource.getItemByName(searchQuery);
-        }
+        String url = "http://172.23.128.1/InventoryApp/edit_items.php?query=" + searchQuery;
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            if (response.has("error")) {
+                                Toast.makeText(EditItem.this, response.getString("error"), Toast.LENGTH_SHORT).show();
+                                clearFields();
+                            } else {
+                                editTextItemID.setText(response.getString("itemID"));
+                                editTextItemName.setText(response.getString("itemName"));
+                                editTextPrice.setText(response.getString("price"));
+                                editTextQuantity.setText(response.getString("quantity"));
+                                editTextDescription.setText(response.getString("description"));
+                                setSpinnerSelection(spinnerCategory, response.getString("category"));
 
-        if (cursor != null && cursor.moveToFirst()) {
-            editTextItemID.setText(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_ITEM_ID)));
-            editTextItemName.setText(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_ITEM_NAME)));
-            editTextPrice.setText(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_PRICE)));
-            editTextQuantity.setText(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_QUANTITY)));
-            editTextDescription.setText(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_DESCRIPTION)));
-            setSpinnerSelection(spinnerCategory, cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_CATEGORY)));
-            cursor.close();
-        } else {
-            clearFields();
-            Toast.makeText(this, "Item not found", Toast.LENGTH_SHORT).show();
-        }
+                                // Disable ItemID field to make it read-only
+                                editTextItemID.setEnabled(false);
+                            }
+                        } catch (Exception e) {
+                            Toast.makeText(EditItem.this, "Error parsing response", Toast.LENGTH_SHORT).show();
+                            clearFields();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(EditItem.this, "Failed to retrieve item", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        requestQueue.add(jsonObjectRequest);
     }
 
-    // Method to prompt the user for confirmation before saving changes
     private void confirmSaveChanges() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Do you want to save the changes?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
+        new AlertDialog.Builder(this)
+                .setTitle("Save Changes")
+                .setMessage("Are you sure you want to save changes?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
                         saveChanges();
                     }
                 })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // User cancelled the dialog
+                .setNegativeButton(android.R.string.no, null)
+                .show();
+    }
+
+    private void saveChanges() {
+        // Create a JSONObject for the POST request
+        JSONObject jsonObject = new JSONObject();
+        try {
+            String itemID = editTextItemID.getText().toString().trim();
+            // Ensure itemID is present
+            if (!itemID.isEmpty()) {
+                jsonObject.put("itemID", itemID);
+
+                String itemName = editTextItemName.getText().toString().trim();
+                if (!itemName.isEmpty()) jsonObject.put("itemName", itemName);
+
+                String priceStr = editTextPrice.getText().toString().trim();
+                if (!priceStr.isEmpty()) jsonObject.put("price", Double.parseDouble(priceStr));
+
+                String quantityStr = editTextQuantity.getText().toString().trim();
+                if (!quantityStr.isEmpty()) jsonObject.put("quantity", Integer.parseInt(quantityStr));
+
+                String description = editTextDescription.getText().toString().trim();
+                if (!description.isEmpty()) jsonObject.put("description", description);
+
+                String category = spinnerCategory.getSelectedItem().toString().trim();
+                if (!category.isEmpty()) jsonObject.put("category", category);
+            } else {
+                Toast.makeText(EditItem.this, "Item ID is required", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // Create the request
+        String url = "http://172.23.128.1/InventoryApp/edit_items.php";
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, jsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            if (response.has("error")) {
+                                Toast.makeText(EditItem.this, response.getString("error"), Toast.LENGTH_SHORT).show();
+                            } else if (response.has("success")) {
+                                Toast.makeText(EditItem.this, response.getString("success"), Toast.LENGTH_SHORT).show();
+                                clearFields();
+                            }
+                        } catch (Exception e) {
+                            Toast.makeText(EditItem.this, "Error parsing response", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(EditItem.this, "Failed to update item", Toast.LENGTH_SHORT).show();
                     }
                 });
-        builder.create().show();
+
+        requestQueue.add(jsonObjectRequest);
     }
 
-    // Method to save the changes made to the item
-    private void saveChanges() {
-        String itemID = editTextItemID.getText().toString().trim();
-        String itemName = editTextItemName.getText().toString().trim();
-        double price;
-        int quantity;
-
-        try {
-            price = Double.parseDouble(editTextPrice.getText().toString().trim());
-            quantity = Integer.parseInt(editTextQuantity.getText().toString().trim());
-        } catch (NumberFormatException e) {
-            Toast.makeText(this, "Invalid price or quantity", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        String description = editTextDescription.getText().toString().trim();
-        String category = spinnerCategory.getSelectedItem().toString();
-
-        int rowsAffected = dataSource.updateItem(itemID, itemName, price, quantity, description, category);
-
-        if (rowsAffected > 0) {
-            Toast.makeText(this, "Changes saved", Toast.LENGTH_SHORT).show();
-            clearFields();
-        } else {
-            Toast.makeText(this, "Failed to save changes", Toast.LENGTH_SHORT).show();
+    private void setSpinnerSelection(Spinner spinner, String category) {
+        ArrayAdapter<String> adapter = (ArrayAdapter<String>) spinner.getAdapter();
+        int position = adapter.getPosition(category);
+        if (position >= 0) {
+            spinner.setSelection(position);
         }
     }
 
-    // Method to clear the input fields
     private void clearFields() {
         editTextItemID.setText("");
         editTextItemName.setText("");
         editTextPrice.setText("");
         editTextQuantity.setText("");
         editTextDescription.setText("");
-        spinnerCategory.setSelection(0);
+        // Ensure ItemID field is re-enabled if clearing fields
+        editTextItemID.setEnabled(true);
     }
 
-    // Method to set the spinner selection based on the category
-    private void setSpinnerSelection(Spinner spinner, String category) {
-        for (int i = 0; i < spinner.getCount(); i++) {
-            if (spinner.getItemAtPosition(i).toString().equals(category)) {
-                spinner.setSelection(i);
-                break;
-            }
-        }
-    }
-
-    // Method to return to the InventoryPage activity
     private void returnToMenu() {
-        Intent intent = new Intent(EditItem.this, InventoryPage.class);
+        Intent intent = new Intent(this, InventoryPage.class);
         startActivity(intent);
-        finish();
     }
 
     @Override
     protected void onDestroy() {
-        dataSource.close();
         super.onDestroy();
+        requestQueue.cancelAll(this);
     }
 }

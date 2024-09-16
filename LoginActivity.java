@@ -3,10 +3,10 @@ package com.example.inventorymanagementapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.android.volley.Request;
@@ -26,8 +26,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText editTextPassword;
     private Button buttonLogin;
     private Button buttonRegister;
-    private TextView forgotPassword;
-    private String baseURL = "http://172.26.32.1/InventoryApp/";
+    private String baseURL = "http://172.23.128.1/InventoryApp/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +38,6 @@ public class LoginActivity extends AppCompatActivity {
         editTextPassword = findViewById(R.id.editTextPassword);
         buttonLogin = findViewById(R.id.buttonLogin);
         buttonRegister = findViewById(R.id.buttonRegister);
-        forgotPassword = findViewById(R.id.forgotPassword);
 
         // Set click listener for the Login button
         buttonLogin.setOnClickListener(new View.OnClickListener() {
@@ -56,18 +54,10 @@ public class LoginActivity extends AppCompatActivity {
                 navigateToRegisterPage();
             }
         });
-
-        // Set click listener for "I forgot my password" text
-        forgotPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navigateToPasswordResetPage();
-            }
-        });
     }
 
     private void login() {
-        String username = editTextUsername.getText().toString().trim();
+        String username = editTextUsername.getText().toString().trim().toLowerCase(); // Normalize username
         String password = editTextPassword.getText().toString().trim();
 
         if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password)) {
@@ -82,6 +72,7 @@ public class LoginActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        Log.d("LoginResponse", response); // Add this line for debugging
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             String message = jsonObject.getString("message");
@@ -100,7 +91,16 @@ public class LoginActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(LoginActivity.this, "Network error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                        String errorMessage = "Network error";
+                        if (error.networkResponse != null && error.networkResponse.data != null) {
+                            errorMessage = "Network error: " + new String(error.networkResponse.data);
+                        } else if (error.getCause() != null) {
+                            errorMessage = "Network error: " + error.getCause().getMessage();
+                        } else {
+                            errorMessage = "Network error: " + error.getMessage();
+                        }
+                        Toast.makeText(LoginActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+                        error.printStackTrace();
                     }
                 }) {
             @Override
@@ -117,11 +117,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private void navigateToRegisterPage() {
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(intent);
-    }
-
-    private void navigateToPasswordResetPage() {
-        Intent intent = new Intent(LoginActivity.this, PasswordResetActivity.class);
         startActivity(intent);
     }
 }
