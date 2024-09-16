@@ -42,9 +42,12 @@
         <activity android:name=".DeleteItem" />
 
         <!-- DisplayItem Activity -->
-        <activity android:name=".DisplayItem" />
+        <activity android:name=".DisplayItems" />
 
-        <activity android:name=".PasswordResetActivity"></activity>
+        <activity android:name=".ViewItemsActivity"></activity>
+
+
+
 
 
 
