@@ -75,7 +75,7 @@
                 android:hint="Password"
                 android:inputType="textPassword"
                 android:drawableStart="@drawable/lock_icon"
-                android:drawableEnd="@drawable/password_icon"
+                android:drawableEnd="@drawable/visibilityoff_icon"
                 android:drawablePadding="8dp"
                 android:padding="12dp" />
 

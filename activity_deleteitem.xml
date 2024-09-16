@@ -23,15 +23,15 @@
         android:minHeight="48dp"
         android:padding="12dp" />
 
-    <!-- Item ID EditText -->
+    <!-- ItemID EditText (read-only after search) -->
     <EditText
         android:id="@+id/editTextItemID"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Item ID"
-        android:enabled="false"
-        android:minHeight="48dp"
-        android:padding="12dp" />
+        android:padding="12dp"
+        android:inputType="none"
+        android:enabled="false" />
 
     <!-- Item Name EditText -->
     <EditText
@@ -39,7 +39,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Item Name"
-        android:minHeight="48dp"
         android:padding="12dp" />
 
     <!-- Price EditText -->
@@ -48,8 +47,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Price"
-        android:minHeight="48dp"
-        android:padding="12dp" />
+        android:padding="12dp"
+        android:inputType="numberDecimal" />
 
     <!-- Quantity EditText -->
     <EditText
@@ -57,8 +56,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Quantity"
-        android:minHeight="48dp"
-        android:padding="12dp" />
+        android:padding="12dp"
+        android:inputType="number" />
 
     <!-- Description EditText -->
     <EditText
@@ -66,15 +65,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Description"
-        android:minHeight="48dp"
-        android:padding="12dp" />
-
-    <!-- Category Spinner -->
-    <Spinner
-        android:id="@+id/spinnerCategory"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="48dp"
         android:padding="12dp" />
 
     <!-- Delete Item Button -->
@@ -84,7 +74,8 @@
         android:layout_height="wrap_content"
         android:text="Delete Item"
         android:minHeight="48dp"
-        android:padding="12dp" />
+        android:padding="12dp"
+        android:enabled="false" />
 
     <!-- Return to Menu Button -->
     <Button
