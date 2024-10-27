@@ -16,16 +16,17 @@
             <div class="menu-icon" onclick="openSidebar()">
                 <span class="material-icons-outlined">menu</span>
             </div>
-            <div class="header-left">
+            <!--<div class="header-left">
                 <span class="material-icons-outlined">search</span>
             </div>
             <div class="header-right">
                 <span class="material-icons-outlined">notifications</span>
                 <span class="material-icons-outlined">email</span>
                 <span class="material-icons-outlined">account_circle</span>
-            </div>
+            </div>-->
         </header>
 
+        <!-- Sidebar -->
         <aside id="sidebar">
             <div class="sidebar-title">
                 <div class="sidebar-brand">
@@ -45,33 +46,34 @@
                         <span class="material-icons-outlined">inventory_2</span> Products
                     </a>
                 </li>
-                <li class="sidebar-list-item">
+                <!--<li class="sidebar-list-item">
                     <a href="#" target="_self">
                         <span class="material-icons-outlined">category</span> Categories
-                    </a>
+                    </a>-->
                 </li>
-                <li class="sidebar-list-item">
+                <!--<li class="sidebar-list-item">
                     <a href="#" target="_self">
                         <span class="material-icons-outlined">groups</span> Customers
                     </a>
-                </li>
+                </li> 
                 <li class="sidebar-list-item">
                     <a href="#" target="_self">
                         <span class="material-icons-outlined">fact_check</span> Inventory
                     </a>
-                </li>
+                </li>-->
                 <li class="sidebar-list-item">
                     <a href="reports.html" target="_self">
                         <span class="material-icons-outlined">poll</span> Reports
                     </a>
                 </li>
-                <li class="sidebar-list-item">
+                <!--<li class="sidebar-list-item">
                     <a href="#" target="_self">
                         <span class="material-icons-outlined">settings</span> Settings
                     </a>
-                </li>
+                </li>-->
             </ul>
         </aside>
+        <!-- End Sidebar -->
 
         <main class="main-container">
             <div class="main-title">
@@ -98,7 +100,46 @@
     </div>
 
     <!-- Scripts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.35.5/apexcharts.min.js"></script>
-    <script src="js/scripts.js"></script>
+    <script>
+        // Fetch products from get_products.php
+        document.addEventListener('DOMContentLoaded', function() {
+        fetch('http://localhost/Dashboard/get_products.php')
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                const products = data.products;
+                let tableBody = document.getElementById('products-data');
+                tableBody.innerHTML = ''; // Clear any existing data
+
+                // Store products data in localStorage for later use on index.html
+                localStorage.setItem('productsData', JSON.stringify(products));
+                console.log("Products stored in localStorage:", products); // Debug log
+
+                // Loop through the products and add them to the table
+                products.forEach(product => {
+                    let row = `
+                        <tr>
+                            <td>${product.id}</td>
+                            <td>${product.name}</td>
+                            <td>${product.quantity}</td>
+                            <td>${product.price}</td>
+                            <td>${product.description}</td>
+                            <td>${product.category}</td>
+                        </tr>
+                    `;
+                    tableBody.innerHTML += row;
+                });
+            } else {
+                console.error('Error fetching products:', data.message);
+            }
+        })
+        .catch(error => console.error('Error fetching products:', error));
+    });
+</script>
+    
+
+    <!-- ApexCharts and other scripts 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.35.5/apexcharts.min.js"></script>-->
+    <script src="js/scripts.js"></script> 
 </body>
 </html>
