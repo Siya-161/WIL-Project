@@ -1,7 +1,14 @@
 <?php
-// Allow CORS for testing purposes
+// Ensure no output before JSON
+ob_start();  // Start output buffering to prevent any accidental output
+
+// Headers to return JSON
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 // Database connection settings
 $servername = "localhost";
@@ -26,8 +33,8 @@ if ($conn->connect_error) {
 $sql = "SELECT id, name, quantity, price, description, category FROM items";
 $result = $conn->query($sql);
 
+// Check if query was successful
 if ($result === false) {
-    // SQL query failed
     http_response_code(500);
     echo json_encode([
         "status" => "error",
@@ -37,14 +44,14 @@ if ($result === false) {
     exit();
 }
 
+// Check if products exist
 if ($result->num_rows > 0) {
     $products = [];
-    // Fetch data and store it in an array
     while ($row = $result->fetch_assoc()) {
         $products[] = $row;
     }
 
-    // Return the result as JSON
+    // Send the JSON response
     echo json_encode([
         "status" => "success",
         "products" => $products
@@ -57,5 +64,9 @@ if ($result->num_rows > 0) {
     ]);
 }
 
+// Close the database connection
 $conn->close();
-?>
+
+// End output buffering and send the buffer contents
+ob_end_flush();
+
