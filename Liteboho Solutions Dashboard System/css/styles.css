@@ -159,6 +159,12 @@ body {
   margin-top: 60px;
 }
 
+#bar-chart {
+  width: 100%;  /* Full width of its container */
+  height: 350px;  /* Fixed height */
+  margin: 20px 0; /* Optional margin */
+}
+
 .charts-card {
   background-color: #263043;
   margin-bottom: 20px;
