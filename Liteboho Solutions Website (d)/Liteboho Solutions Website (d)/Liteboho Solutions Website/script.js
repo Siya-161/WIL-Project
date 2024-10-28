@@ -68,25 +68,25 @@ copyrightInfo.textContent = "\u00A9 " + theDate.getFullYear() + " Liteboho Solut
 
 //Function for the accordion
 document.addEventListener("DOMContentLoaded", function() {
-    var accordionHeaders = document.querySelectorAll(".accordion-header");
+    var accordionHeaders = document.querySelectorAll('.accordion-header');
 
     accordionHeaders.forEach(function(header) {
-        header.addEventListener("click", function() {
+        header.addEventListener('click', function() {
 
-            this.classList.toggle("active");
+            this.classList.toggle('active');
 
             var content = this.nextElementSibling;
 
-            if (content.style.display === "block" && !this.classList.toggle("active")) {
+            if (content.style.display === 'block' && !this.classList.toggle('active')) {
                 return;
             } else {
 
-                content.style.display = "block";
-                var allContents = document.querySelectorAll(".accordion-content");
+                content.style.display = 'block';
+                var allContents = document.querySelectorAll('.accordion-content');
                 allContents.forEach(function(item) {
-                    if (item !== content && item.style.display === "block") {
-                        item.style.display = "none";
-                        item.previousElementSibling.classList.remove("active");
+                    if (item !== content && item.style.display === 'block') {
+                        item.style.display = 'none';
+                        item.previousElementSibling.classList.remove('active');
                     }
                 });
             }
@@ -146,3 +146,120 @@ document.addEventListener('DOMContentLoaded', function () {
         return re.test(email);
     }
 });
+
+//Testimonial Swiper
+var swiper = new Swiper
+(
+'.testimonial-swiper', 
+  {
+    slidesPerView: 1,
+    spaceBetween: 0,
+    loop: false,
+    pagination: 
+    {
+      el: '.swiper-pagination',
+      clickable: true,
+    },
+    navigation: 
+    {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+  }
+);
+
+function handleSubmit(event) {
+    event.preventDefault();
+    
+    // Gather form data
+    const form = document.getElementById('contactForm');
+    const formData = new FormData(form);
+
+    fetch(form.action, {
+        method: form.method,
+        body: formData,
+        headers: {
+            'Accept': 'application/json'
+        }
+    }).then(response => {
+        if (response.ok) {
+            // Reset the form and clear any validation messages
+            form.reset();
+            document.getElementById('emailError').textContent = '';
+            document.getElementById('emailSuggestion').textContent = '';
+
+            // Show success message or popup
+            alert("Thank you for reaching out! Your message has been sent successfully.");
+
+            // Display the custom popup and blur effect
+            showPopup();
+            document.querySelector('.contact-content').classList.add('blurred');
+
+        } else {
+            alert("There was an issue with your submission. Please try again.");
+        }
+    }).catch(error => {
+        console.error('Error:', error);
+        alert("There was an error submitting your form. Please try again.");
+    });
+
+    return false;
+}
+
+
+
+
+
+function openTab(evt, tabName) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tab-content");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tab-link");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(tabName).style.display = "block";
+    evt.currentTarget.className += " active";
+}
+
+// Default open tab
+document.getElementById("repairs").style.display = "block";
+
+
+function showPopup() {
+    document.getElementById('confirmationPopup').style.display = 'flex';
+}
+
+function closePopup() {
+    // Hide the popup
+    document.getElementById('confirmationPopup').style.display = 'none';
+
+    // Remove the blur from the background
+    document.querySelector('.contact-content').classList.remove('blurred');
+}
+
+
+document.getElementById("contactForm").addEventListener("submit", function (e) {
+    e.preventDefault(); // prevent the default form submission
+    let email = document.getElementById("email").value;
+    let emailError = document.getElementById("emailError");
+    let emailSuggestion = document.getElementById("emailSuggestion");
+
+    if (!validateEmail(email)) {
+        emailError.textContent = "Please enter a valid email address.";
+        return;
+    } else {
+        emailError.textContent = "";
+    }
+
+    // After successful validation and form submission
+    document.getElementById("contactForm").reset(); // clear the form
+    document.getElementById("successMessage").style.display = "block"; // show the success message
+});
+
+function validateEmail(email) {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+}
