@@ -1,0 +1,6 @@
+<!-- res/drawable/custom_toast_background.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#5D5E61" /> <!-- Toast background color -->
+    <corners android:radius="16dp" /> <!-- Rounded corners -->
+    <padding android:left="12dp" android:top="8dp" android:right="12dp" android:bottom="8dp"/>
+</shape>
