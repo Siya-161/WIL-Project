@@ -21,6 +21,7 @@ Table of Contents
 •	Sidebar Navigation: Easily navigate between dashboard sections via the sidebar menu.
 
 •	Error Handling and Caching Prevention: Includes session validation, error messages, and caching prevention to ensure secure and smooth operation.
+
 ----------------------------
 2.	Tech Stack
 •	Frontend: HTML, CSS (with responsive layout), JavaScript, and Google Material Icons.
@@ -32,6 +33,7 @@ Table of Contents
 •	Charts: ApexCharts for data visualization.
 
 •	AJAX and Fetch API: For handling asynchronous data loading.
+
 ----------------------------
 3.	Installation and Setup
 •	Clone the Repository: https://github.com/BlackSIYA11/WIL-Project/tree/main/LitebohoSolutionsDashboardSystem
@@ -52,6 +54,7 @@ i.	Use Apache or a similar web server to serve the files. If using XAMPP, place 
 in C:/wamp64/www
 
 ii.	Start the server and navigate to http://localhost/Liteboho-Admin-Dashboard/login.html
+
 ----------------------------
 4.	Usage
 •	Login: Access the login page at login.html and enter your username and password.  Upon successful login, you will be redirected to index.html, where you can access the dashboard.
@@ -61,6 +64,7 @@ ii.	Start the server and navigate to http://localhost/Liteboho-Admin-Dashboard/l
 •	Viewing Data and Charts:  The main dashboard displays key metrics, including the number of stock items, users, and categories. Charts display top products and inventory levels. Data is dynamically fetched from the database.
 
 •	Adding products: The dashboard is strictly for viewing purposes, adding products is done on the inventory management application, this will reflect on the dashboard.
+
 ----------------------------
 5.	Troubleshooting
 •	Logout Not Immediate: Ensure logout.php is configured to fully clear the session and cookies. Confirm the Cache-Control headers are properly set. If the logout action seems delayed, check for caching in the browser's Network tab in Developer Tools.
