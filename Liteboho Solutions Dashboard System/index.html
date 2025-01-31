@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Liteboho Admin Dashboard</title>
+
+    <!-- Montserrat Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        /* Custom tooltip styling */
+        .tooltip-container {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            color: #ffffff; /* Ensure icon color is white */
+        }
+
+        .tooltip-text {
+            visibility: hidden;
+            width: 250px;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            text-align: left; /* Align text to the left */
+            border-radius: 5px;
+            padding: 10px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%; /* Position above the element */
+            left: 50%;
+            margin-left: -125px; /* Adjust width for center alignment */
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .tooltip-container:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Add an arrow to the tooltip */
+        .tooltip-text::after {
+            content: '';
+            position: absolute;
+            top: 100%; /* At the bottom of the tooltip */
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: rgba(0, 0, 0, 0.8) transparent transparent transparent;
+        }
+
+        /* Styling the info icon */
+        .info-icon {
+            font-size: 20px;
+            vertical-align: middle;
+            margin-left: 10px;
+        }
+    </style>
+    
+    
+</head>
+<body>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Check session status once the DOM is fully loaded
+            fetch("check_session.php")
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.loggedIn) {
+                        window.location.href = "login.html"; // Redirect to login if not logged in
+                    }
+                })
+                .catch(error => console.error("Error checking session:", error));
+        });
+    </script>
+    
+    <div class="grid-container">
+        <header class="header">
+            <div class="menu-icon" onclick="openSidebar()">
+                <span class="material-icons-outlined">menu</span>
+            </div>
+        <!-- End Header -->
+        </header>
+
+        <!-- Sidebar -->
+        <aside id="sidebar">
+            <div class="sidebar-title">
+                <div class="sidebar-brand">
+                    <span class="material-icons-outlined">view_sidebar</span> SIDEBAR
+                </div>
+                <span class="material-icons-outlined" onclick="closeSidebar()">close</span>
+            </div>
+            <ul class="sidebar-list">
+                <li class="sidebar-list-item">
+                    <a href="index.html">
+                        <span class="material-icons-outlined">dashboard</span> Dashboard
+                    </a>
+                </li>
+                <li class="sidebar-list-item">
+                    <a href="products.html">
+                        <span class="material-icons-outlined">inventory_2</span> Products
+                    </a>
+                </li>
+                <li class="sidebar-list-item">
+                    <a href="reports.html">
+                        <span class="material-icons-outlined">poll</span> Reports
+                    </a>
+                </li>
+
+                <!-- Logout Button -->
+                <li class="sidebar-list-item logout-item">
+                    <button id="logout-button" class="logout-button">
+                        <span class="material-icons-outlined">logout</span> Logout
+                    </button>
+                </li>
+            </ul>
+        </aside>
+        <!-- End Sidebar -->
+
+        <!-- Main -->
+        <main class="main-container">
+            <div class="main-title">
+                <h2>LITEBOHO SOLUTIONS DASHBOARD</h2>
+            </div>
+
+            <div class="main-cards">
+                <div class="card">
+                    <a href="products.html" style="text-decoration: none; color: inherit;">
+                        <div class="card-inner">
+                            <h3>STOCK ITEMS</h3>
+                            <span class="material-icons-outlined">inventory_2</span>
+                        </div>
+                        <h1 id="stock-items-count">0</h1> <!-- Dynamic stock items count -->
+                    </a>
+                </div>
+
+                <div class="card">
+                    <div class="card-inner">
+                        <h3>PRODUCT & SERVICES CATEGORIES</h3>
+                        <span class="material-icons-outlined">category</span>
+                    </div>
+                    <h1>4</h1>
+                </div>
+
+                <!-- Users Card -->
+                <div class="card">
+                    <div class="card-inner">
+                        <h3>ADMINS</h3>
+                        <span class="material-icons-outlined">groups</span>
+                    </div>
+                    <h1 id="user-count">0</h1> <!-- Dynamic user count -->
+                </div>
+
+                <div class="card">
+                    <div class="card-inner">
+                        <h3>ALERTS</h3>
+                        <span class="material-icons-outlined">notification_important</span>
+                    </div>
+                    <h1>0</h1>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="charts">
+                <!-- Top 5 Stocked Items Chart -->
+                <div class="charts-card"> 
+                    <h2 class="chart-title">Top 5 Stocked Items
+                        <div class="tooltip-container">
+                            <span class="material-icons-outlined info-icon">info</span>
+                            <span class="tooltip-text">This chart displays the top 5 products in inventory from the products table on the products page, based on stock quantity. It helps track the availability of essential items.</span>
+                        </div>
+                    </h2>
+                    <div id="bar-chart"></div>
+                </div>
+
+                <!-- Top 5 Highest Cost Items Chart -->
+                <div class="charts-card"> 
+                    <h2 class="chart-title">Top 5 Highest Cost Items
+                        <div class="tooltip-container">
+                            <span class="material-icons-outlined info-icon">info</span>
+                            <span class="tooltip-text">This chart shows the top 5 most expensive products based on their total value in stock from the products table on the products page (price multiplied by quantity). It helps monitor high-value assets.</span>
+                        </div>
+                    </h2>
+                    <div id="cost-chart"></div>
+                </div>
+            </div>
+        </main>
+        <!-- End Main -->
+
+    </div>
+
+    <!-- Load ApexCharts Library -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+    
+
+
+    <!-- Chart Rendering Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const storedProducts = localStorage.getItem('productsData');
+            if (!storedProducts) {
+                console.error('No product data available in localStorage.');
+                return;
+            }
+            const products = JSON.parse(storedProducts);
+
+            // Top 5 Stocked Items
+            const topProducts = products.sort((a, b) => parseInt(b.quantity) - parseInt(a.quantity)).slice(0, 5);
+            const productNames = topProducts.map(product => product.name);
+            const productQuantities = topProducts.map(product => parseInt(product.quantity));
+
+            var stockedChartOptions = {
+                series: [{ name: 'Quantity', data: productQuantities }],
+                chart: {
+                    type: 'bar',
+                    height: 350,
+                    background: 'transparent',
+                    foreColor: '#f5f5f5',
+                    toolbar: { show: false } // Disable default toolbar
+                },
+                plotOptions: {
+                    bar: {
+                        borderRadius: 4,
+                        horizontal: true,
+                        distributed: true,
+                        columnWidth: '45%'
+                    }
+                },
+                colors: ['#FF4560', '#008FFB', '#00E396', '#FEB019', '#775DD0'],
+                dataLabels: {
+                    enabled: true,
+                    style: { colors: ['#ffffff'] }
+                },
+                xaxis: {
+                    categories: productNames,
+                    title: { text: 'Quantity', style: { color: '#ffffff' } },
+                    labels: { style: { colors: '#ffffff' } }
+                },
+                yaxis: {
+                    labels: { style: { colors: '#ffffff' } },
+                    title: { text: 'Product', style: { color: '#ffffff' } }
+                },
+                grid: { borderColor: '#55596e' },
+                tooltip: { theme: 'dark' }
+            };
+
+            const barChartElement = document.querySelector("#bar-chart");
+            if (barChartElement) {
+                var barChart = new ApexCharts(barChartElement, stockedChartOptions);
+                barChart.render();
+            }
+
+            // Top 5 Highest Cost Items
+            const topCostlyProducts = products
+                .map(product => ({
+                    name: product.name,
+                    totalCost: parseFloat(product.price) * parseInt(product.quantity)
+                }))
+                .sort((a, b) => b.totalCost - a.totalCost)
+                .slice(0, 5);
+
+            const costlyProductNames = topCostlyProducts.map(product => product.name);
+            const productCosts = topCostlyProducts.map(product => product.totalCost);
+
+            var costChartOptions = {
+                series: [{ name: 'Total Cost', data: productCosts }],
+                chart: {
+                    type: 'bar',
+                    height: 350,
+                    background: 'transparent',
+                    foreColor: '#f5f5f5',
+                    toolbar: { show: false } // Disable default toolbar
+                },
+                plotOptions: {
+                    bar: {
+                        borderRadius: 4,
+                        horizontal: true,
+                        distributed: true,
+                        columnWidth: '45%'
+                    }
+                },
+                colors: ['#FF4560', '#008FFB', '#00E396', '#FEB019', '#775DD0'],
+                dataLabels: {
+                    enabled: true,
+                    style: { colors: ['#ffffff'] }
+                },
+                xaxis: {
+                    categories: costlyProductNames,
+                    title: { text: 'Total Cost', style: { color: '#ffffff' } },
+                    labels: { style: { colors: '#ffffff' } }
+                },
+                yaxis: {
+                    labels: { style: { colors: '#ffffff' } },
+                    title: { text: 'Product', style: { color: '#ffffff' } }
+                },
+                grid: { borderColor: '#55596e' },
+                tooltip: { theme: 'dark' }
+            };
+
+            const costChartElement = document.querySelector("#cost-chart");
+            if (costChartElement) {
+                var costChart = new ApexCharts(costChartElement, costChartOptions);
+                costChart.render();
+            }
+        });
+    </script>
+
+    <!-- Stock item count script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Retrieve products data from localStorage
+            const storedProducts = localStorage.getItem('productsData');
+            if (!storedProducts) {
+                console.error('No product data available in localStorage.');
+                return;
+            }
+
+            const products = JSON.parse(storedProducts);
+
+            // Calculate the total number of stock items
+            const totalStockItems = products.reduce((total, product) => total + parseInt(product.quantity, 10), 0);
+
+            // Update the stock items count on the dashboard
+            const stockItemsCountElement = document.getElementById('stock-items-count');
+            if (stockItemsCountElement) {
+                stockItemsCountElement.textContent = totalStockItems;
+            } else {
+                console.error('Stock items count element not found.');
+            }
+        });
+    </script>
+    
+    <!-- Users count script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Fetch the number of users from the PHP backend
+            fetch('http://localhost/Dashboard/get_users.php') // Adjust the path to your PHP file
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    const userCountElement = document.getElementById('user-count');
+                    if (userCountElement) {
+                        userCountElement.textContent = data.user_count;
+                    } else {
+                        console.error('User count element not found.');
+                    }
+                } else {
+                    console.error('Error fetching user count:', data.message);
+                }
+            })
+            .catch(error => console.error('Error fetching user count:', error));
+        });
+    </script>
+    
+    <iframe id="refresh-products" src="products.html" style="display:none;"></iframe>
+</body>
+</html>
