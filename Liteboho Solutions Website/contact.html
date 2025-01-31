@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us</title>
+    <link rel="icon" type="img" href="_images/logo.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.3.3/css/swiper.css">
+    <link rel="stylesheet" href="CSS/style.css">
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</head>
+
+<body>
+    <header>
+        <div class="social-media-links">
+            <div>
+                <a href="https://www.facebook.com/" target="_blank" class="fa fa-facebook"></a>
+                <a href="https://www.instagram.com/" target="_blank" class="fa fa-instagram"></a>
+            </div>
+            <div>
+                <a href="https://za.linkedin.com/" target="_blank" class="fa fa-linkedin"></a>
+                <a href="https://web.whatsapp.com/" target="_blank" class="fa fa-phone"></a>
+            </div>
+        </div>
+        <div class="logo-container">
+            <a href="index.html"><img src="_images/logo.jpg" width="150" height="90" class="logo"></a>
+          </div>
+        <div class="navbar">
+            <a href="index.html">Home</a>
+            <a href="about.html">About Us</a>
+            <a href="portfolio.html">Portfolio</a>
+            <a href="products_n_services.html">Product & Services</a>
+            <a href="contact.html">Contact Us</a>
+        </div>
+    </header>
+
+    <div class="parallax" style="background-image: url(_images/pexels-rezwan-1145434.jpg);">
+        <div class="parallax-content">
+          <h2 class="parallax-title">Contact Us</h2>
+        </div>
+      </div>
+
+    <div class="contact-content">
+        <div class="contact-header">
+            <h1>Contact Liteboho Solutions</h1>
+            <p>Feel free to reach out to us with any inquiries, project requests, or feedback. We're here to assist you!</p>
+        </div>
+    
+        <div class="contact-row">
+            <div class="contact-container">
+                <!-- Contact Information -->
+                <div class="contact-info">
+                    <h2>Our Contact Information</h2>
+                    <div class="contact-details">
+                        <h3><strong>Email:</strong></h3> 
+                        <p>info@litebohosolutions.com</p>
+                        <h3><strong>Phone:</strong></h3>
+                        <p>+27 82 324 6912</p>
+                        <h3><strong>Address:</strong></h3>
+                        <p>2nd Street Walkerville, Midvaal, Gauteng</p>
+                    </div>
+                </div>
+    
+                <!-- Contact Form -->
+                <div class="contact-form">
+                    <h2>Get in Touch</h2>
+                    <form id="contactForm" method="POST" action="https://formspree.io/f/meojkvvg" onsubmit="return handleSubmit(event)" >
+                        <label for="name">Name:</label>
+                        <input type="text" id="name" name="name" required>
+                
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" required>
+                        <small id="emailError" class="error"></small>
+                        <small id="emailSuggestion" class="suggestion"></small>
+                
+                        <label for="services">Services:</label>
+                        <select id="services" name="services" required>
+                            <option value="construction">Construction</option>
+                            <option value="engineering">Engineering</option>
+                            <option value="repairs">Repairs</option>
+                            <option value="maintenance">Maintenance</option>
+                        </select>
+                
+                        <label for="message">Message:</label>
+                        <textarea id="message" name="message" required></textarea>
+                
+                        <button type="submit">Send</button>
+                    </form>
+                
+                    <!-- Success message area -->
+                    <div id="successMessage" style="display:none;">
+                        <h3>Thank you for reaching out!</h3>
+                        <p>Your message has been sent successfully. You can continue browsing.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="map-container" onmouseover="playSound()">
+            <!-- Google Maps -->
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3573.365529292947!2d27.956739675422305!3d-26.41167827694941!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1e9500e81cb85a35%3A0xf05c19a419ba3d40!2s2nd%20St%2C%20Walkerville%2C%201961!5e0!3m2!1sfr!2sza!4v1730979016542!5m2!1sfr!2sza"
+                width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+        
+        <!-- Include the audio file -->
+<audio id="notificationSound" src="_images/whoosh.mp3" preload="auto"></audio>
+
+<script>
+  function playSound() {
+    var audio = document.getElementById("notificationSound");
+    audio.play();
+  }
+</script>
+
+    </div>
+
+    <!-- Pop-up Confirmation -->
+<div id="confirmationPopup" class="popup-overlay">
+    <div class="popup-content">
+        <h2>Message Sent!</h2>
+        <p>Thank you for reaching out. We will contact you within 24 hours.</p>
+        <button onclick="closePopup()">Close</button>
+    </div>
+</div>
+
+<footer class="footer">
+
+    <!-- Column 1: Logo and Business Description -->
+    <div class="footer-column">
+        <img src="_images/logo.jpg" alt="Company Logo" class="footer-logo">
+        <p>LiTeboho Solutions is a leading</br>engineering, project management,</br> 
+            infrastructural development,empowerment,</br> company committed to the
+            reconstruction</br> and development of the resources of </br>South Africa, Africa and the
+            rest of the world.</p>
+    </div>
+  
+    <!-- Column 2: Navigation Links -->
+    <div class="footer-column">
+        <div class="footer-links">
+            <h3>Navigation</h3>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="portfolio.html">Portfolio</a></li>
+                <li><a href="products_n_services.html">Product & Services</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div id="google_translate_element"></div>
+        </div>
+    </div>
+  
+    <!-- Column 3: Contact Details -->
+    <div class="footer-column">
+        <div class="contact-details">
+            <h3>Contact Us</h3>
+        <p>Address: 2nd Street Walkerville, Midvaal, Gauteng 1876</p>
+          <p>Phone: +27 82 324 6912 </p>
+          <p>Email: info@litebohosolutions.com</p>
+        </div>
+    </div>
+
+    <!-- Column 4: Certifications -->
+    <div class="footer-column">
+        <div class="certifications">
+            <h3>Certifications</h3>
+            <img src="_images/national-home-builders-registration-council-nhbrc_orig.png" alt="NHBRC Logo" class="nhbrc-logo">
+            <img src="_images/CIDB.jpg" alt="CIDB Logo" class="cidb-logo">
+        </div>
+    </div>
+
+    <button id="back-to-top" onclick="scrollToTop()"><i class="fas fa-arrow-up"></i></button>
+      
+    <div id="copyright-info"></div>
+    </footer>
+
+</footer>
+      <!-- Link JS File -->
+      <script src="script.js"></script>
+      <script>
+        // Function to populate the service and message based on URL query parameters
+        function populateForm() {
+          const urlParams = new URLSearchParams(window.location.search);
+      
+          // Prepopulate the service dropdown
+          const selectedService = urlParams.get('service');
+          if (selectedService) {
+            const serviceDropdown = document.getElementById('services');
+            serviceDropdown.value = selectedService;
+          }
+      
+          // Prepopulate the message field with the custom enquiry message
+          const defaultMessage = urlParams.get('message');
+          if (defaultMessage) {
+            const messageField = document.getElementById('message');
+            messageField.value = defaultMessage;
+          }
+        }
+      
+        // Call the function when the page loads
+        window.onload = populateForm;
+      </script>
+
+
+</body>
+
+</html>
