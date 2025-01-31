@@ -10,6 +10,7 @@ Table of Contents
 5.	Troubleshooting
 ----------------------------
 1.	Features
+   
 •	User Authentication: Login and logout functionality with session management.
 
 •	Dashboard Overview: Displays key metrics in a card layout, including stock items, product categories, users, and alerts.
@@ -24,6 +25,7 @@ Table of Contents
 
 ----------------------------
 2.	Tech Stack
+   
 •	Frontend: HTML, CSS (with responsive layout), JavaScript, and Google Material Icons.
 
 •	Backend: PHP for server-side processing and session management.
@@ -36,6 +38,7 @@ Table of Contents
 
 ----------------------------
 3.	Installation and Setup
+   
 •	Clone the Repository: https://github.com/BlackSIYA11/WIL-Project/tree/main/LitebohoSolutionsDashboardSystem
 
 •	Database Setup:
@@ -57,6 +60,7 @@ ii.	Start the server and navigate to http://localhost/Liteboho-Admin-Dashboard/l
 
 ----------------------------
 4.	Usage
+   
 •	Login: Access the login page at login.html and enter your username and password.  Upon successful login, you will be redirected to index.html, where you can access the dashboard.
 
 •	Logout: Use the Logout button located in the sidebar to log out and return to the login page. This action immediately clears the session data.
@@ -67,6 +71,7 @@ ii.	Start the server and navigate to http://localhost/Liteboho-Admin-Dashboard/l
 
 ----------------------------
 5.	Troubleshooting
+   
 •	Logout Not Immediate: Ensure logout.php is configured to fully clear the session and cookies. Confirm the Cache-Control headers are properly set. If the logout action seems delayed, check for caching in the browser's Network tab in Developer Tools.
 
 •	Database Connection Errors: Verify that your MySQL database credentials in login.php and other PHP files match your local setup. Confirm that the MySQL service is running and accessible on localhost.
